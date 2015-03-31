@@ -1,0 +1,100 @@
+%%
+
+%term
+    EOF | DOT | COMMA | NOT | ABS | BOOL of bool | IF
+    | PLUS | SUB | TIMES | DIV | MOD | GREATER | EXP | BY
+	| GREATEROREQUAL | LESSOREQUAL | EQUAL | SEMI | FUN
+	| NOTEQUAL | LESS | AND | OR | LEFTPAREN | RIGHTPAREN
+	| UNDERSCORE | CONS | STARTLIST | ENDLIST | QUERY
+    | LCID of string | UCID of string | NUM of int | REAL of real*int
+
+
+%nonterm 
+    program of Absyn.prog | declist of Absyn.decl list | dec of Absyn.decl | fact of Absyn.decl 
+	| rule of Absyn.decl | predicate of Absyn.expr | predicatelist of Absyn.expr list | head of Absyn.head
+	| body of Absyn.body | goal of Absyn.decl | termlist of Absyn.expr list | term of Absyn.expr | expression of Absyn.expr
+	| plist of Absyn.expr | plistlist of Absyn.expr
+	
+%start program
+%eop EOF SEMI
+%pos int
+%verbose
+%pure
+
+%left AND OR
+%left PLUS SUB
+%left TIMES
+%left DIV MOD BY
+%left NOT ABS
+%right EXP
+%nonassoc GREATER GREATEROREQUAL LESSOREQUAL NOTEQUAL LESS EQUAL
+
+%name Fol
+
+%prefer EXP DIV TIMES PLUS SUB
+%%
+
+program : declist(Absyn.PROG(declist))
+
+declist : dec ([dec])
+		| dec declist (dec::declist)
+		
+dec	: fact (fact)
+	| rule (rule)
+	| goal (goal)
+	
+fact : predicate DOT (Absyn.FACT predicate)
+
+rule : head IF body DOT (Absyn.RULE(head, body))
+
+head : predicate (Absyn.HEAD(predicate))
+
+body : predicatelist (Absyn.BODY(predicatelist))
+
+goal : QUERY predicatelist DOT (Absyn.GOAL(predicatelist))
+
+predicatelist : predicate ([predicate])
+              | predicate COMMA predicatelist (predicate::predicatelist)
+
+predicate : LCID LEFTPAREN termlist RIGHTPAREN (Absyn.FUNC(LCID, termlist))
+
+termlist : term ([term])
+		 | term COMMA termlist (term::termlist)
+		 
+term : expression (expression)
+     | LCID LEFTPAREN termlist RIGHTPAREN (Absyn.FUNC(LCID, termlist))
+
+expression : UCID (Absyn.VAR UCID)
+	       | UNDERSCORE (Absyn.VAR "_")
+		   | LCID (Absyn.SYMBOL LCID)
+		   | NUM (Absyn.NUM NUM)
+		   | BOOL (Absyn.BOOL BOOL)
+		   | REAL (Absyn.REAL REAL)
+		   | plist (plist)
+		   | NOT expression (Absyn.FUNC("not", [expression]))
+		   | ABS expression (Absyn.FUNC("abs", [expression]))
+		   | expression PLUS expression (Absyn.FUNC("plus", [expression1, expression2]))
+		   | expression SUB expression (Absyn.FUNC("sub", [expression1, expression2]))
+		   | expression TIMES expression (Absyn.FUNC("times", [expression1, expression2]))
+		   | expression DIV expression (Absyn.FUNC("div", [expression1, expression2]))
+		   | expression MOD expression (Absyn.FUNC("mod", [expression1, expression2]))
+		   | expression BY expression (Absyn.FUNC("by", [expression1, expression2]))
+		   | expression EXP expression (Absyn.FUNC("exp", [expression1, expression2]))
+		   | expression GREATER expression (Absyn.FUNC("greater", [expression1, expression2]))
+		   | expression GREATEROREQUAL expression (Absyn.FUNC("greaterOrEqual", [expression1, expression2]))
+		   | expression LESSOREQUAL expression (Absyn.FUNC("lessOrEqual", [expression1, expression2]))
+		   | expression EQUAL expression (Absyn.FUNC("equal", [expression1, expression2]))
+		   | expression NOTEQUAL expression (Absyn.FUNC("notEqual", [expression1, expression2]))
+		   | expression LESS expression (Absyn.FUNC("less", [expression1, expression2]))
+		   | expression AND expression (Absyn.FUNC("and", [expression1, expression2]))
+		   | expression OR expression (Absyn.FUNC("or", [expression1, expression2]))
+		   | LEFTPAREN expression RIGHTPAREN (expression)
+		   
+plist : STARTLIST ENDLIST (Absyn.SYMBOL "[]")
+	  | STARTLIST UCID CONS UCID ENDLIST (Absyn.FUNC ("cons", [Absyn.VAR UCID1, Absyn.VAR UCID2]))
+	  | STARTLIST plistlist ENDLIST (plistlist)
+	  
+plistlist : UCID (Absyn.FUNC ("cons", [Absyn.VAR UCID, Absyn.SYMBOL "[]"]))
+          | LCID (Absyn.FUNC ("cons", [Absyn.SYMBOL LCID, Absyn.SYMBOL "[]"]))
+		  | UCID COMMA plistlist (Absyn.FUNC ("cons", [Absyn.VAR UCID, plistlist]))
+		  | LCID COMMA plistlist (Absyn.FUNC ("cons", [Absyn.SYMBOL LCID, plistlist]))

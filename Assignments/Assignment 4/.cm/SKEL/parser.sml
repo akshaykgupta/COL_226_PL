@@ -1,0 +1,2 @@
+Skeleton 5
+d2f2d"Int"d"TextIO"ad"Fol"h3aä¢FolLrVals"jh1aä¢Token"gp2ä¢LrParser"ÿ-gp1e"FolLrValsFun"aä¢FolLex"jh1aä¢Tokens"gp2ÿÿ%gp1e"FolLexFun"ad"FolParser"jh3aÿ8gp1ÿ8aä¢ParserData"gp2ÿÿ‚ad"Lex"gp1ÿgp1e"Join"

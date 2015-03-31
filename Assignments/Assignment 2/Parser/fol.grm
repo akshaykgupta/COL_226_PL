@@ -1,0 +1,81 @@
+%%
+
+%term
+    EOF | DOT | COMMA | NOT | ABS | BOOL of bool | IF | QUERY
+    | PLUS | SUB | TIMES | DIV | MOD | GREATER | EXP
+	| GREATEROREQUAL | LESSOREQUAL | EQUAL | SEMI | FUN
+	| NOTEQUAL | LESS | AND | OR | LEFTPAREN | RIGHTPAREN
+    | LCID of string | UCID of string | NUM of int | REAL of real*int
+
+
+%nonterm 
+    program of Absyn.prog | declist of Absyn.decl list | dec of Absyn.decl | fact of Absyn.decl 
+	| rule of Absyn.decl | predicate of Absyn.pred | predicatelist of Absyn.pred list | head of Absyn.head
+	| body of Absyn.body | termlist of Absyn.expr list | term of Absyn.expr | expression of Absyn.expr
+	
+	
+%start program
+%eop EOF SEMI
+%pos int
+%verbose
+%pure
+
+%right EXP 
+%left DIV TIMES PLUS SUB MOD AND OR
+
+%name Fol
+
+%prefer EXP DIV TIMES PLUS SUB
+%%
+
+program : declist(Absyn.PROG(declist))
+
+declist : dec ([dec])
+		| dec declist (dec::declist)
+		
+dec	: fact (fact)
+	| rule (rule)
+	
+fact : predicate DOT (Absyn.FACT predicate)
+
+rule : head IF body DOT (Absyn.RULE(head, body))
+
+head : predicate (Absyn.HEAD(predicate))
+
+body : predicatelist (Absyn.BODY(predicatelist))
+
+predicatelist : predicate ([predicate])
+              | predicate COMMA predicatelist (predicate::predicatelist)
+
+predicate : LCID LEFTPAREN termlist RIGHTPAREN (Absyn.PRED(LCID, termlist))
+
+termlist : term ([term])
+		 | term COMMA termlist (term::termlist)
+		 
+term : expression (expression)
+     | LCID LEFTPAREN termlist RIGHTPAREN (Absyn.FUNC(LCID, termlist))
+
+expression : UCID (Absyn.VAR UCID)
+		   | LCID (Absyn.SYMBOL LCID)
+		   | NUM (Absyn.NUM NUM)
+		   | BOOL (Absyn.BOOL BOOL)
+		   | REAL (Absyn.REAL REAL)
+		   | NOT expression (Absyn.UNARY("Not", expression))
+		   | ABS expression (Absyn.UNARY("Abs", expression))
+		   | expression PLUS expression (Absyn.BINARY("Plus", expression1, expression2))
+		   | expression SUB expression (Absyn.BINARY("Sub", expression1, expression2))
+		   | expression TIMES expression (Absyn.BINARY("Times", expression1, expression2))
+		   | expression DIV expression (Absyn.BINARY("Div", expression1, expression2))
+		   | expression MOD expression (Absyn.BINARY("Mod", expression1, expression2))
+		   | expression EXP expression (Absyn.BINARY("Exp", expression1, expression2))
+		   | expression GREATER expression (Absyn.BINARY("Greater", expression1, expression2))
+		   | expression GREATEROREQUAL expression (Absyn.BINARY("GreaterOrEqual", expression1, expression2))
+		   | expression LESSOREQUAL expression (Absyn.BINARY("LessOrEqual", expression1, expression2))
+		   | expression EQUAL expression (Absyn.BINARY("Equal", expression1, expression2))
+		   | expression NOTEQUAL expression (Absyn.BINARY("NotEqual", expression1, expression2))
+		   | expression LESS expression (Absyn.BINARY("Less", expression1, expression2))
+		   | expression AND expression (Absyn.BINARY("And", expression1, expression2))
+		   | expression OR expression (Absyn.BINARY("Or", expression1, expression2))
+		   | LEFTPAREN expression RIGHTPAREN (expression)
+
+

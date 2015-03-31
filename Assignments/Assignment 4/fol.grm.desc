@@ -1,0 +1,1629 @@
+
+state 0:
+
+	program : . declist 
+
+	QUERY	shift 9
+	LCID	shift 8
+
+	program	goto 90
+	declist	goto 7
+	dec	goto 6
+	fact	goto 5
+	rule	goto 4
+	predicate	goto 3
+	head	goto 2
+	goal	goto 1
+
+	.	error
+
+
+state 1:
+
+	dec : goal .  (reduce by rule 5)
+
+
+
+	.	reduce by rule 5
+
+
+state 2:
+
+	rule : head . IF body DOT 
+
+	IF	shift 10
+
+
+	.	error
+
+
+state 3:
+
+	fact : predicate . DOT 
+	head : predicate .  (reduce by rule 8)
+
+	DOT	shift 11
+
+
+	.	reduce by rule 8
+
+
+state 4:
+
+	dec : rule .  (reduce by rule 4)
+
+
+
+	.	reduce by rule 4
+
+
+state 5:
+
+	dec : fact .  (reduce by rule 3)
+
+
+
+	.	reduce by rule 3
+
+
+state 6:
+
+	declist : dec .  (reduce by rule 1)
+	declist : dec . declist 
+
+	QUERY	shift 9
+	LCID	shift 8
+
+	declist	goto 12
+	dec	goto 6
+	fact	goto 5
+	rule	goto 4
+	predicate	goto 3
+	head	goto 2
+	goal	goto 1
+
+	.	reduce by rule 1
+
+
+state 7:
+
+	program : declist .  (reduce by rule 0)
+
+
+
+	.	reduce by rule 0
+
+
+state 8:
+
+	predicate : LCID . LEFTPAREN termlist RIGHTPAREN 
+
+	LEFTPAREN	shift 13
+
+
+	.	error
+
+
+state 9:
+
+	goal : QUERY . predicatelist DOT 
+
+	LCID	shift 8
+
+	predicate	goto 15
+	predicatelist	goto 14
+
+	.	error
+
+
+state 10:
+
+	rule : head IF . body DOT 
+
+	LCID	shift 8
+
+	predicate	goto 15
+	predicatelist	goto 17
+	body	goto 16
+
+	.	error
+
+
+state 11:
+
+	fact : predicate DOT .  (reduce by rule 6)
+
+
+
+	.	reduce by rule 6
+
+
+state 12:
+
+	declist : dec declist .  (reduce by rule 2)
+
+
+
+	.	reduce by rule 2
+
+
+state 13:
+
+	predicate : LCID LEFTPAREN . termlist RIGHTPAREN 
+
+	NOT	shift 31
+	ABS	shift 30
+	BOOL	shift 29
+	LEFTPAREN	shift 28
+	UNDERSCORE	shift 27
+	STARTLIST	shift 26
+	LCID	shift 25
+	UCID	shift 24
+	NUM	shift 23
+	REAL	shift 22
+
+	termlist	goto 21
+	term	goto 20
+	expression	goto 19
+	plist	goto 18
+
+	.	error
+
+
+state 14:
+
+	goal : QUERY predicatelist . DOT 
+
+	DOT	shift 32
+
+
+	.	error
+
+
+state 15:
+
+	predicatelist : predicate .  (reduce by rule 11)
+	predicatelist : predicate . COMMA predicatelist 
+
+	COMMA	shift 33
+
+
+	.	reduce by rule 11
+
+
+state 16:
+
+	rule : head IF body . DOT 
+
+	DOT	shift 34
+
+
+	.	error
+
+
+state 17:
+
+	body : predicatelist .  (reduce by rule 9)
+
+
+
+	.	reduce by rule 9
+
+
+state 18:
+
+	expression : plist .  (reduce by rule 24)
+
+
+
+	.	reduce by rule 24
+
+
+state 19:
+
+	term : expression .  (reduce by rule 16)
+	expression : expression . PLUS expression 
+	expression : expression . SUB expression 
+	expression : expression . TIMES expression 
+	expression : expression . DIV expression 
+	expression : expression . MOD expression 
+	expression : expression . BY expression 
+	expression : expression . EXP expression 
+	expression : expression . GREATER expression 
+	expression : expression . GREATEROREQUAL expression 
+	expression : expression . LESSOREQUAL expression 
+	expression : expression . EQUAL expression 
+	expression : expression . NOTEQUAL expression 
+	expression : expression . LESS expression 
+	expression : expression . AND expression 
+	expression : expression . OR expression 
+
+	PLUS	shift 49
+	SUB	shift 48
+	TIMES	shift 47
+	DIV	shift 46
+	MOD	shift 45
+	GREATER	shift 44
+	EXP	shift 43
+	BY	shift 42
+	GREATEROREQUAL	shift 41
+	LESSOREQUAL	shift 40
+	EQUAL	shift 39
+	NOTEQUAL	shift 38
+	LESS	shift 37
+	AND	shift 36
+	OR	shift 35
+
+
+	.	reduce by rule 16
+
+
+state 20:
+
+	termlist : term .  (reduce by rule 14)
+	termlist : term . COMMA termlist 
+
+	COMMA	shift 50
+
+
+	.	reduce by rule 14
+
+
+state 21:
+
+	predicate : LCID LEFTPAREN termlist . RIGHTPAREN 
+
+	RIGHTPAREN	shift 51
+
+
+	.	error
+
+
+state 22:
+
+	expression : REAL .  (reduce by rule 23)
+
+
+
+	.	reduce by rule 23
+
+
+state 23:
+
+	expression : NUM .  (reduce by rule 21)
+
+
+
+	.	reduce by rule 21
+
+
+state 24:
+
+	expression : UCID .  (reduce by rule 18)
+
+
+
+	.	reduce by rule 18
+
+
+state 25:
+
+	term : LCID . LEFTPAREN termlist RIGHTPAREN 
+	expression : LCID .  (reduce by rule 20)
+
+	LEFTPAREN	shift 52
+
+
+	.	reduce by rule 20
+
+
+state 26:
+
+	plist : STARTLIST . ENDLIST 
+	plist : STARTLIST . UCID CONS UCID ENDLIST 
+	plist : STARTLIST . plistlist ENDLIST 
+
+	ENDLIST	shift 56
+	LCID	shift 55
+	UCID	shift 54
+
+	plistlist	goto 53
+
+	.	error
+
+
+state 27:
+
+	expression : UNDERSCORE .  (reduce by rule 19)
+
+
+
+	.	reduce by rule 19
+
+
+state 28:
+
+	expression : LEFTPAREN . expression RIGHTPAREN 
+
+	NOT	shift 31
+	ABS	shift 30
+	BOOL	shift 29
+	LEFTPAREN	shift 28
+	UNDERSCORE	shift 27
+	STARTLIST	shift 26
+	LCID	shift 58
+	UCID	shift 24
+	NUM	shift 23
+	REAL	shift 22
+
+	expression	goto 57
+	plist	goto 18
+
+	.	error
+
+
+state 29:
+
+	expression : BOOL .  (reduce by rule 22)
+
+
+
+	.	reduce by rule 22
+
+
+state 30:
+
+	expression : ABS . expression 
+
+	NOT	shift 31
+	ABS	shift 30
+	BOOL	shift 29
+	LEFTPAREN	shift 28
+	UNDERSCORE	shift 27
+	STARTLIST	shift 26
+	LCID	shift 58
+	UCID	shift 24
+	NUM	shift 23
+	REAL	shift 22
+
+	expression	goto 59
+	plist	goto 18
+
+	.	error
+
+
+state 31:
+
+	expression : NOT . expression 
+
+	NOT	shift 31
+	ABS	shift 30
+	BOOL	shift 29
+	LEFTPAREN	shift 28
+	UNDERSCORE	shift 27
+	STARTLIST	shift 26
+	LCID	shift 58
+	UCID	shift 24
+	NUM	shift 23
+	REAL	shift 22
+
+	expression	goto 60
+	plist	goto 18
+
+	.	error
+
+
+state 32:
+
+	goal : QUERY predicatelist DOT .  (reduce by rule 10)
+
+
+
+	.	reduce by rule 10
+
+
+state 33:
+
+	predicatelist : predicate COMMA . predicatelist 
+
+	LCID	shift 8
+
+	predicate	goto 15
+	predicatelist	goto 61
+
+	.	error
+
+
+state 34:
+
+	rule : head IF body DOT .  (reduce by rule 7)
+
+
+
+	.	reduce by rule 7
+
+
+state 35:
+
+	expression : expression OR . expression 
+
+	NOT	shift 31
+	ABS	shift 30
+	BOOL	shift 29
+	LEFTPAREN	shift 28
+	UNDERSCORE	shift 27
+	STARTLIST	shift 26
+	LCID	shift 58
+	UCID	shift 24
+	NUM	shift 23
+	REAL	shift 22
+
+	expression	goto 62
+	plist	goto 18
+
+	.	error
+
+
+state 36:
+
+	expression : expression AND . expression 
+
+	NOT	shift 31
+	ABS	shift 30
+	BOOL	shift 29
+	LEFTPAREN	shift 28
+	UNDERSCORE	shift 27
+	STARTLIST	shift 26
+	LCID	shift 58
+	UCID	shift 24
+	NUM	shift 23
+	REAL	shift 22
+
+	expression	goto 63
+	plist	goto 18
+
+	.	error
+
+
+state 37:
+
+	expression : expression LESS . expression 
+
+	NOT	shift 31
+	ABS	shift 30
+	BOOL	shift 29
+	LEFTPAREN	shift 28
+	UNDERSCORE	shift 27
+	STARTLIST	shift 26
+	LCID	shift 58
+	UCID	shift 24
+	NUM	shift 23
+	REAL	shift 22
+
+	expression	goto 64
+	plist	goto 18
+
+	.	error
+
+
+state 38:
+
+	expression : expression NOTEQUAL . expression 
+
+	NOT	shift 31
+	ABS	shift 30
+	BOOL	shift 29
+	LEFTPAREN	shift 28
+	UNDERSCORE	shift 27
+	STARTLIST	shift 26
+	LCID	shift 58
+	UCID	shift 24
+	NUM	shift 23
+	REAL	shift 22
+
+	expression	goto 65
+	plist	goto 18
+
+	.	error
+
+
+state 39:
+
+	expression : expression EQUAL . expression 
+
+	NOT	shift 31
+	ABS	shift 30
+	BOOL	shift 29
+	LEFTPAREN	shift 28
+	UNDERSCORE	shift 27
+	STARTLIST	shift 26
+	LCID	shift 58
+	UCID	shift 24
+	NUM	shift 23
+	REAL	shift 22
+
+	expression	goto 66
+	plist	goto 18
+
+	.	error
+
+
+state 40:
+
+	expression : expression LESSOREQUAL . expression 
+
+	NOT	shift 31
+	ABS	shift 30
+	BOOL	shift 29
+	LEFTPAREN	shift 28
+	UNDERSCORE	shift 27
+	STARTLIST	shift 26
+	LCID	shift 58
+	UCID	shift 24
+	NUM	shift 23
+	REAL	shift 22
+
+	expression	goto 67
+	plist	goto 18
+
+	.	error
+
+
+state 41:
+
+	expression : expression GREATEROREQUAL . expression 
+
+	NOT	shift 31
+	ABS	shift 30
+	BOOL	shift 29
+	LEFTPAREN	shift 28
+	UNDERSCORE	shift 27
+	STARTLIST	shift 26
+	LCID	shift 58
+	UCID	shift 24
+	NUM	shift 23
+	REAL	shift 22
+
+	expression	goto 68
+	plist	goto 18
+
+	.	error
+
+
+state 42:
+
+	expression : expression BY . expression 
+
+	NOT	shift 31
+	ABS	shift 30
+	BOOL	shift 29
+	LEFTPAREN	shift 28
+	UNDERSCORE	shift 27
+	STARTLIST	shift 26
+	LCID	shift 58
+	UCID	shift 24
+	NUM	shift 23
+	REAL	shift 22
+
+	expression	goto 69
+	plist	goto 18
+
+	.	error
+
+
+state 43:
+
+	expression : expression EXP . expression 
+
+	NOT	shift 31
+	ABS	shift 30
+	BOOL	shift 29
+	LEFTPAREN	shift 28
+	UNDERSCORE	shift 27
+	STARTLIST	shift 26
+	LCID	shift 58
+	UCID	shift 24
+	NUM	shift 23
+	REAL	shift 22
+
+	expression	goto 70
+	plist	goto 18
+
+	.	error
+
+
+state 44:
+
+	expression : expression GREATER . expression 
+
+	NOT	shift 31
+	ABS	shift 30
+	BOOL	shift 29
+	LEFTPAREN	shift 28
+	UNDERSCORE	shift 27
+	STARTLIST	shift 26
+	LCID	shift 58
+	UCID	shift 24
+	NUM	shift 23
+	REAL	shift 22
+
+	expression	goto 71
+	plist	goto 18
+
+	.	error
+
+
+state 45:
+
+	expression : expression MOD . expression 
+
+	NOT	shift 31
+	ABS	shift 30
+	BOOL	shift 29
+	LEFTPAREN	shift 28
+	UNDERSCORE	shift 27
+	STARTLIST	shift 26
+	LCID	shift 58
+	UCID	shift 24
+	NUM	shift 23
+	REAL	shift 22
+
+	expression	goto 72
+	plist	goto 18
+
+	.	error
+
+
+state 46:
+
+	expression : expression DIV . expression 
+
+	NOT	shift 31
+	ABS	shift 30
+	BOOL	shift 29
+	LEFTPAREN	shift 28
+	UNDERSCORE	shift 27
+	STARTLIST	shift 26
+	LCID	shift 58
+	UCID	shift 24
+	NUM	shift 23
+	REAL	shift 22
+
+	expression	goto 73
+	plist	goto 18
+
+	.	error
+
+
+state 47:
+
+	expression : expression TIMES . expression 
+
+	NOT	shift 31
+	ABS	shift 30
+	BOOL	shift 29
+	LEFTPAREN	shift 28
+	UNDERSCORE	shift 27
+	STARTLIST	shift 26
+	LCID	shift 58
+	UCID	shift 24
+	NUM	shift 23
+	REAL	shift 22
+
+	expression	goto 74
+	plist	goto 18
+
+	.	error
+
+
+state 48:
+
+	expression : expression SUB . expression 
+
+	NOT	shift 31
+	ABS	shift 30
+	BOOL	shift 29
+	LEFTPAREN	shift 28
+	UNDERSCORE	shift 27
+	STARTLIST	shift 26
+	LCID	shift 58
+	UCID	shift 24
+	NUM	shift 23
+	REAL	shift 22
+
+	expression	goto 75
+	plist	goto 18
+
+	.	error
+
+
+state 49:
+
+	expression : expression PLUS . expression 
+
+	NOT	shift 31
+	ABS	shift 30
+	BOOL	shift 29
+	LEFTPAREN	shift 28
+	UNDERSCORE	shift 27
+	STARTLIST	shift 26
+	LCID	shift 58
+	UCID	shift 24
+	NUM	shift 23
+	REAL	shift 22
+
+	expression	goto 76
+	plist	goto 18
+
+	.	error
+
+
+state 50:
+
+	termlist : term COMMA . termlist 
+
+	NOT	shift 31
+	ABS	shift 30
+	BOOL	shift 29
+	LEFTPAREN	shift 28
+	UNDERSCORE	shift 27
+	STARTLIST	shift 26
+	LCID	shift 25
+	UCID	shift 24
+	NUM	shift 23
+	REAL	shift 22
+
+	termlist	goto 77
+	term	goto 20
+	expression	goto 19
+	plist	goto 18
+
+	.	error
+
+
+state 51:
+
+	predicate : LCID LEFTPAREN termlist RIGHTPAREN .  (reduce by rule 13)
+
+
+
+	.	reduce by rule 13
+
+
+state 52:
+
+	term : LCID LEFTPAREN . termlist RIGHTPAREN 
+
+	NOT	shift 31
+	ABS	shift 30
+	BOOL	shift 29
+	LEFTPAREN	shift 28
+	UNDERSCORE	shift 27
+	STARTLIST	shift 26
+	LCID	shift 25
+	UCID	shift 24
+	NUM	shift 23
+	REAL	shift 22
+
+	termlist	goto 78
+	term	goto 20
+	expression	goto 19
+	plist	goto 18
+
+	.	error
+
+
+state 53:
+
+	plist : STARTLIST plistlist . ENDLIST 
+
+	ENDLIST	shift 79
+
+
+	.	error
+
+
+state 54:
+
+	plist : STARTLIST UCID . CONS UCID ENDLIST 
+	plistlist : UCID .  (reduce by rule 46)
+	plistlist : UCID . COMMA plistlist 
+
+	COMMA	shift 81
+	CONS	shift 80
+
+
+	.	reduce by rule 46
+
+
+state 55:
+
+	plistlist : LCID .  (reduce by rule 47)
+	plistlist : LCID . COMMA plistlist 
+
+	COMMA	shift 82
+
+
+	.	reduce by rule 47
+
+
+state 56:
+
+	plist : STARTLIST ENDLIST .  (reduce by rule 43)
+
+
+
+	.	reduce by rule 43
+
+
+state 57:
+
+	expression : expression . PLUS expression 
+	expression : expression . SUB expression 
+	expression : expression . TIMES expression 
+	expression : expression . DIV expression 
+	expression : expression . MOD expression 
+	expression : expression . BY expression 
+	expression : expression . EXP expression 
+	expression : expression . GREATER expression 
+	expression : expression . GREATEROREQUAL expression 
+	expression : expression . LESSOREQUAL expression 
+	expression : expression . EQUAL expression 
+	expression : expression . NOTEQUAL expression 
+	expression : expression . LESS expression 
+	expression : expression . AND expression 
+	expression : expression . OR expression 
+	expression : LEFTPAREN expression . RIGHTPAREN 
+
+	PLUS	shift 49
+	SUB	shift 48
+	TIMES	shift 47
+	DIV	shift 46
+	MOD	shift 45
+	GREATER	shift 44
+	EXP	shift 43
+	BY	shift 42
+	GREATEROREQUAL	shift 41
+	LESSOREQUAL	shift 40
+	EQUAL	shift 39
+	NOTEQUAL	shift 38
+	LESS	shift 37
+	AND	shift 36
+	OR	shift 35
+	RIGHTPAREN	shift 83
+
+
+	.	error
+
+
+state 58:
+
+	expression : LCID .  (reduce by rule 20)
+
+
+
+	.	reduce by rule 20
+
+
+state 59:
+
+	expression : ABS expression .  (reduce by rule 26)
+	expression : expression . PLUS expression 
+	expression : expression . SUB expression 
+	expression : expression . TIMES expression 
+	expression : expression . DIV expression 
+	expression : expression . MOD expression 
+	expression : expression . BY expression 
+	expression : expression . EXP expression 
+	expression : expression . GREATER expression 
+	expression : expression . GREATEROREQUAL expression 
+	expression : expression . LESSOREQUAL expression 
+	expression : expression . EQUAL expression 
+	expression : expression . NOTEQUAL expression 
+	expression : expression . LESS expression 
+	expression : expression . AND expression 
+	expression : expression . OR expression 
+
+	GREATER	shift 44
+	EXP	shift 43
+	GREATEROREQUAL	shift 41
+	LESSOREQUAL	shift 40
+	EQUAL	shift 39
+	NOTEQUAL	shift 38
+	LESS	shift 37
+
+
+	.	reduce by rule 26
+
+
+state 60:
+
+	expression : NOT expression .  (reduce by rule 25)
+	expression : expression . PLUS expression 
+	expression : expression . SUB expression 
+	expression : expression . TIMES expression 
+	expression : expression . DIV expression 
+	expression : expression . MOD expression 
+	expression : expression . BY expression 
+	expression : expression . EXP expression 
+	expression : expression . GREATER expression 
+	expression : expression . GREATEROREQUAL expression 
+	expression : expression . LESSOREQUAL expression 
+	expression : expression . EQUAL expression 
+	expression : expression . NOTEQUAL expression 
+	expression : expression . LESS expression 
+	expression : expression . AND expression 
+	expression : expression . OR expression 
+
+	GREATER	shift 44
+	EXP	shift 43
+	GREATEROREQUAL	shift 41
+	LESSOREQUAL	shift 40
+	EQUAL	shift 39
+	NOTEQUAL	shift 38
+	LESS	shift 37
+
+
+	.	reduce by rule 25
+
+
+state 61:
+
+	predicatelist : predicate COMMA predicatelist .  (reduce by rule 12)
+
+
+
+	.	reduce by rule 12
+
+
+state 62:
+
+	expression : expression . PLUS expression 
+	expression : expression . SUB expression 
+	expression : expression . TIMES expression 
+	expression : expression . DIV expression 
+	expression : expression . MOD expression 
+	expression : expression . BY expression 
+	expression : expression . EXP expression 
+	expression : expression . GREATER expression 
+	expression : expression . GREATEROREQUAL expression 
+	expression : expression . LESSOREQUAL expression 
+	expression : expression . EQUAL expression 
+	expression : expression . NOTEQUAL expression 
+	expression : expression . LESS expression 
+	expression : expression . AND expression 
+	expression : expression . OR expression 
+	expression : expression OR expression .  (reduce by rule 41)
+
+	PLUS	shift 49
+	SUB	shift 48
+	TIMES	shift 47
+	DIV	shift 46
+	MOD	shift 45
+	GREATER	shift 44
+	EXP	shift 43
+	BY	shift 42
+	GREATEROREQUAL	shift 41
+	LESSOREQUAL	shift 40
+	EQUAL	shift 39
+	NOTEQUAL	shift 38
+	LESS	shift 37
+
+
+	.	reduce by rule 41
+
+
+state 63:
+
+	expression : expression . PLUS expression 
+	expression : expression . SUB expression 
+	expression : expression . TIMES expression 
+	expression : expression . DIV expression 
+	expression : expression . MOD expression 
+	expression : expression . BY expression 
+	expression : expression . EXP expression 
+	expression : expression . GREATER expression 
+	expression : expression . GREATEROREQUAL expression 
+	expression : expression . LESSOREQUAL expression 
+	expression : expression . EQUAL expression 
+	expression : expression . NOTEQUAL expression 
+	expression : expression . LESS expression 
+	expression : expression . AND expression 
+	expression : expression AND expression .  (reduce by rule 40)
+	expression : expression . OR expression 
+
+	PLUS	shift 49
+	SUB	shift 48
+	TIMES	shift 47
+	DIV	shift 46
+	MOD	shift 45
+	GREATER	shift 44
+	EXP	shift 43
+	BY	shift 42
+	GREATEROREQUAL	shift 41
+	LESSOREQUAL	shift 40
+	EQUAL	shift 39
+	NOTEQUAL	shift 38
+	LESS	shift 37
+
+
+	.	reduce by rule 40
+
+
+state 64:
+
+	expression : expression . PLUS expression 
+	expression : expression . SUB expression 
+	expression : expression . TIMES expression 
+	expression : expression . DIV expression 
+	expression : expression . MOD expression 
+	expression : expression . BY expression 
+	expression : expression . EXP expression 
+	expression : expression . GREATER expression 
+	expression : expression . GREATEROREQUAL expression 
+	expression : expression . LESSOREQUAL expression 
+	expression : expression . EQUAL expression 
+	expression : expression . NOTEQUAL expression 
+	expression : expression . LESS expression 
+	expression : expression LESS expression .  (reduce by rule 39)
+	expression : expression . AND expression 
+	expression : expression . OR expression 
+
+	COMMA	reduce by rule 39
+	PLUS	reduce by rule 39
+	SUB	reduce by rule 39
+	TIMES	reduce by rule 39
+	DIV	reduce by rule 39
+	MOD	reduce by rule 39
+	EXP	reduce by rule 39
+	BY	reduce by rule 39
+	AND	reduce by rule 39
+	OR	reduce by rule 39
+	RIGHTPAREN	reduce by rule 39
+
+
+	.	error
+
+
+state 65:
+
+	expression : expression . PLUS expression 
+	expression : expression . SUB expression 
+	expression : expression . TIMES expression 
+	expression : expression . DIV expression 
+	expression : expression . MOD expression 
+	expression : expression . BY expression 
+	expression : expression . EXP expression 
+	expression : expression . GREATER expression 
+	expression : expression . GREATEROREQUAL expression 
+	expression : expression . LESSOREQUAL expression 
+	expression : expression . EQUAL expression 
+	expression : expression . NOTEQUAL expression 
+	expression : expression NOTEQUAL expression .  (reduce by rule 38)
+	expression : expression . LESS expression 
+	expression : expression . AND expression 
+	expression : expression . OR expression 
+
+	COMMA	reduce by rule 38
+	PLUS	reduce by rule 38
+	SUB	reduce by rule 38
+	TIMES	reduce by rule 38
+	DIV	reduce by rule 38
+	MOD	reduce by rule 38
+	EXP	reduce by rule 38
+	BY	reduce by rule 38
+	AND	reduce by rule 38
+	OR	reduce by rule 38
+	RIGHTPAREN	reduce by rule 38
+
+
+	.	error
+
+
+state 66:
+
+	expression : expression . PLUS expression 
+	expression : expression . SUB expression 
+	expression : expression . TIMES expression 
+	expression : expression . DIV expression 
+	expression : expression . MOD expression 
+	expression : expression . BY expression 
+	expression : expression . EXP expression 
+	expression : expression . GREATER expression 
+	expression : expression . GREATEROREQUAL expression 
+	expression : expression . LESSOREQUAL expression 
+	expression : expression . EQUAL expression 
+	expression : expression EQUAL expression .  (reduce by rule 37)
+	expression : expression . NOTEQUAL expression 
+	expression : expression . LESS expression 
+	expression : expression . AND expression 
+	expression : expression . OR expression 
+
+	COMMA	reduce by rule 37
+	PLUS	reduce by rule 37
+	SUB	reduce by rule 37
+	TIMES	reduce by rule 37
+	DIV	reduce by rule 37
+	MOD	reduce by rule 37
+	EXP	reduce by rule 37
+	BY	reduce by rule 37
+	AND	reduce by rule 37
+	OR	reduce by rule 37
+	RIGHTPAREN	reduce by rule 37
+
+
+	.	error
+
+
+state 67:
+
+	expression : expression . PLUS expression 
+	expression : expression . SUB expression 
+	expression : expression . TIMES expression 
+	expression : expression . DIV expression 
+	expression : expression . MOD expression 
+	expression : expression . BY expression 
+	expression : expression . EXP expression 
+	expression : expression . GREATER expression 
+	expression : expression . GREATEROREQUAL expression 
+	expression : expression . LESSOREQUAL expression 
+	expression : expression LESSOREQUAL expression .  (reduce by rule 36)
+	expression : expression . EQUAL expression 
+	expression : expression . NOTEQUAL expression 
+	expression : expression . LESS expression 
+	expression : expression . AND expression 
+	expression : expression . OR expression 
+
+	COMMA	reduce by rule 36
+	PLUS	reduce by rule 36
+	SUB	reduce by rule 36
+	TIMES	reduce by rule 36
+	DIV	reduce by rule 36
+	MOD	reduce by rule 36
+	EXP	reduce by rule 36
+	BY	reduce by rule 36
+	AND	reduce by rule 36
+	OR	reduce by rule 36
+	RIGHTPAREN	reduce by rule 36
+
+
+	.	error
+
+
+state 68:
+
+	expression : expression . PLUS expression 
+	expression : expression . SUB expression 
+	expression : expression . TIMES expression 
+	expression : expression . DIV expression 
+	expression : expression . MOD expression 
+	expression : expression . BY expression 
+	expression : expression . EXP expression 
+	expression : expression . GREATER expression 
+	expression : expression . GREATEROREQUAL expression 
+	expression : expression GREATEROREQUAL expression .  (reduce by rule 35)
+	expression : expression . LESSOREQUAL expression 
+	expression : expression . EQUAL expression 
+	expression : expression . NOTEQUAL expression 
+	expression : expression . LESS expression 
+	expression : expression . AND expression 
+	expression : expression . OR expression 
+
+	COMMA	reduce by rule 35
+	PLUS	reduce by rule 35
+	SUB	reduce by rule 35
+	TIMES	reduce by rule 35
+	DIV	reduce by rule 35
+	MOD	reduce by rule 35
+	EXP	reduce by rule 35
+	BY	reduce by rule 35
+	AND	reduce by rule 35
+	OR	reduce by rule 35
+	RIGHTPAREN	reduce by rule 35
+
+
+	.	error
+
+
+state 69:
+
+	expression : expression . PLUS expression 
+	expression : expression . SUB expression 
+	expression : expression . TIMES expression 
+	expression : expression . DIV expression 
+	expression : expression . MOD expression 
+	expression : expression . BY expression 
+	expression : expression BY expression .  (reduce by rule 32)
+	expression : expression . EXP expression 
+	expression : expression . GREATER expression 
+	expression : expression . GREATEROREQUAL expression 
+	expression : expression . LESSOREQUAL expression 
+	expression : expression . EQUAL expression 
+	expression : expression . NOTEQUAL expression 
+	expression : expression . LESS expression 
+	expression : expression . AND expression 
+	expression : expression . OR expression 
+
+	GREATER	shift 44
+	EXP	shift 43
+	GREATEROREQUAL	shift 41
+	LESSOREQUAL	shift 40
+	EQUAL	shift 39
+	NOTEQUAL	shift 38
+	LESS	shift 37
+
+
+	.	reduce by rule 32
+
+
+state 70:
+
+	expression : expression . PLUS expression 
+	expression : expression . SUB expression 
+	expression : expression . TIMES expression 
+	expression : expression . DIV expression 
+	expression : expression . MOD expression 
+	expression : expression . BY expression 
+	expression : expression . EXP expression 
+	expression : expression EXP expression .  (reduce by rule 33)
+	expression : expression . GREATER expression 
+	expression : expression . GREATEROREQUAL expression 
+	expression : expression . LESSOREQUAL expression 
+	expression : expression . EQUAL expression 
+	expression : expression . NOTEQUAL expression 
+	expression : expression . LESS expression 
+	expression : expression . AND expression 
+	expression : expression . OR expression 
+
+	GREATER	shift 44
+	EXP	shift 43
+	GREATEROREQUAL	shift 41
+	LESSOREQUAL	shift 40
+	EQUAL	shift 39
+	NOTEQUAL	shift 38
+	LESS	shift 37
+
+
+	.	reduce by rule 33
+
+
+state 71:
+
+	expression : expression . PLUS expression 
+	expression : expression . SUB expression 
+	expression : expression . TIMES expression 
+	expression : expression . DIV expression 
+	expression : expression . MOD expression 
+	expression : expression . BY expression 
+	expression : expression . EXP expression 
+	expression : expression . GREATER expression 
+	expression : expression GREATER expression .  (reduce by rule 34)
+	expression : expression . GREATEROREQUAL expression 
+	expression : expression . LESSOREQUAL expression 
+	expression : expression . EQUAL expression 
+	expression : expression . NOTEQUAL expression 
+	expression : expression . LESS expression 
+	expression : expression . AND expression 
+	expression : expression . OR expression 
+
+	COMMA	reduce by rule 34
+	PLUS	reduce by rule 34
+	SUB	reduce by rule 34
+	TIMES	reduce by rule 34
+	DIV	reduce by rule 34
+	MOD	reduce by rule 34
+	EXP	reduce by rule 34
+	BY	reduce by rule 34
+	AND	reduce by rule 34
+	OR	reduce by rule 34
+	RIGHTPAREN	reduce by rule 34
+
+
+	.	error
+
+
+state 72:
+
+	expression : expression . PLUS expression 
+	expression : expression . SUB expression 
+	expression : expression . TIMES expression 
+	expression : expression . DIV expression 
+	expression : expression . MOD expression 
+	expression : expression MOD expression .  (reduce by rule 31)
+	expression : expression . BY expression 
+	expression : expression . EXP expression 
+	expression : expression . GREATER expression 
+	expression : expression . GREATEROREQUAL expression 
+	expression : expression . LESSOREQUAL expression 
+	expression : expression . EQUAL expression 
+	expression : expression . NOTEQUAL expression 
+	expression : expression . LESS expression 
+	expression : expression . AND expression 
+	expression : expression . OR expression 
+
+	GREATER	shift 44
+	EXP	shift 43
+	GREATEROREQUAL	shift 41
+	LESSOREQUAL	shift 40
+	EQUAL	shift 39
+	NOTEQUAL	shift 38
+	LESS	shift 37
+
+
+	.	reduce by rule 31
+
+
+state 73:
+
+	expression : expression . PLUS expression 
+	expression : expression . SUB expression 
+	expression : expression . TIMES expression 
+	expression : expression . DIV expression 
+	expression : expression DIV expression .  (reduce by rule 30)
+	expression : expression . MOD expression 
+	expression : expression . BY expression 
+	expression : expression . EXP expression 
+	expression : expression . GREATER expression 
+	expression : expression . GREATEROREQUAL expression 
+	expression : expression . LESSOREQUAL expression 
+	expression : expression . EQUAL expression 
+	expression : expression . NOTEQUAL expression 
+	expression : expression . LESS expression 
+	expression : expression . AND expression 
+	expression : expression . OR expression 
+
+	GREATER	shift 44
+	EXP	shift 43
+	GREATEROREQUAL	shift 41
+	LESSOREQUAL	shift 40
+	EQUAL	shift 39
+	NOTEQUAL	shift 38
+	LESS	shift 37
+
+
+	.	reduce by rule 30
+
+
+state 74:
+
+	expression : expression . PLUS expression 
+	expression : expression . SUB expression 
+	expression : expression . TIMES expression 
+	expression : expression TIMES expression .  (reduce by rule 29)
+	expression : expression . DIV expression 
+	expression : expression . MOD expression 
+	expression : expression . BY expression 
+	expression : expression . EXP expression 
+	expression : expression . GREATER expression 
+	expression : expression . GREATEROREQUAL expression 
+	expression : expression . LESSOREQUAL expression 
+	expression : expression . EQUAL expression 
+	expression : expression . NOTEQUAL expression 
+	expression : expression . LESS expression 
+	expression : expression . AND expression 
+	expression : expression . OR expression 
+
+	DIV	shift 46
+	MOD	shift 45
+	GREATER	shift 44
+	EXP	shift 43
+	BY	shift 42
+	GREATEROREQUAL	shift 41
+	LESSOREQUAL	shift 40
+	EQUAL	shift 39
+	NOTEQUAL	shift 38
+	LESS	shift 37
+
+
+	.	reduce by rule 29
+
+
+state 75:
+
+	expression : expression . PLUS expression 
+	expression : expression . SUB expression 
+	expression : expression SUB expression .  (reduce by rule 28)
+	expression : expression . TIMES expression 
+	expression : expression . DIV expression 
+	expression : expression . MOD expression 
+	expression : expression . BY expression 
+	expression : expression . EXP expression 
+	expression : expression . GREATER expression 
+	expression : expression . GREATEROREQUAL expression 
+	expression : expression . LESSOREQUAL expression 
+	expression : expression . EQUAL expression 
+	expression : expression . NOTEQUAL expression 
+	expression : expression . LESS expression 
+	expression : expression . AND expression 
+	expression : expression . OR expression 
+
+	TIMES	shift 47
+	DIV	shift 46
+	MOD	shift 45
+	GREATER	shift 44
+	EXP	shift 43
+	BY	shift 42
+	GREATEROREQUAL	shift 41
+	LESSOREQUAL	shift 40
+	EQUAL	shift 39
+	NOTEQUAL	shift 38
+	LESS	shift 37
+
+
+	.	reduce by rule 28
+
+
+state 76:
+
+	expression : expression . PLUS expression 
+	expression : expression PLUS expression .  (reduce by rule 27)
+	expression : expression . SUB expression 
+	expression : expression . TIMES expression 
+	expression : expression . DIV expression 
+	expression : expression . MOD expression 
+	expression : expression . BY expression 
+	expression : expression . EXP expression 
+	expression : expression . GREATER expression 
+	expression : expression . GREATEROREQUAL expression 
+	expression : expression . LESSOREQUAL expression 
+	expression : expression . EQUAL expression 
+	expression : expression . NOTEQUAL expression 
+	expression : expression . LESS expression 
+	expression : expression . AND expression 
+	expression : expression . OR expression 
+
+	TIMES	shift 47
+	DIV	shift 46
+	MOD	shift 45
+	GREATER	shift 44
+	EXP	shift 43
+	BY	shift 42
+	GREATEROREQUAL	shift 41
+	LESSOREQUAL	shift 40
+	EQUAL	shift 39
+	NOTEQUAL	shift 38
+	LESS	shift 37
+
+
+	.	reduce by rule 27
+
+
+state 77:
+
+	termlist : term COMMA termlist .  (reduce by rule 15)
+
+
+
+	.	reduce by rule 15
+
+
+state 78:
+
+	term : LCID LEFTPAREN termlist . RIGHTPAREN 
+
+	RIGHTPAREN	shift 84
+
+
+	.	error
+
+
+state 79:
+
+	plist : STARTLIST plistlist ENDLIST .  (reduce by rule 45)
+
+
+
+	.	reduce by rule 45
+
+
+state 80:
+
+	plist : STARTLIST UCID CONS . UCID ENDLIST 
+
+	UCID	shift 85
+
+
+	.	error
+
+
+state 81:
+
+	plistlist : UCID COMMA . plistlist 
+
+	LCID	shift 55
+	UCID	shift 87
+
+	plistlist	goto 86
+
+	.	error
+
+
+state 82:
+
+	plistlist : LCID COMMA . plistlist 
+
+	LCID	shift 55
+	UCID	shift 87
+
+	plistlist	goto 88
+
+	.	error
+
+
+state 83:
+
+	expression : LEFTPAREN expression RIGHTPAREN .  (reduce by rule 42)
+
+
+
+	.	reduce by rule 42
+
+
+state 84:
+
+	term : LCID LEFTPAREN termlist RIGHTPAREN .  (reduce by rule 17)
+
+
+
+	.	reduce by rule 17
+
+
+state 85:
+
+	plist : STARTLIST UCID CONS UCID . ENDLIST 
+
+	ENDLIST	shift 89
+
+
+	.	error
+
+
+state 86:
+
+	plistlist : UCID COMMA plistlist .  (reduce by rule 48)
+
+
+
+	.	reduce by rule 48
+
+
+state 87:
+
+	plistlist : UCID .  (reduce by rule 46)
+	plistlist : UCID . COMMA plistlist 
+
+	COMMA	shift 81
+
+
+	.	reduce by rule 46
+
+
+state 88:
+
+	plistlist : LCID COMMA plistlist .  (reduce by rule 49)
+
+
+
+	.	reduce by rule 49
+
+
+state 89:
+
+	plist : STARTLIST UCID CONS UCID ENDLIST .  (reduce by rule 44)
+
+
+
+	.	reduce by rule 44
+
+
+state 90:
+
+
+	EOF	accept
+	SEMI	accept
+
+
+	.	error
+
+246 of 531 action table entries left after compaction
+73 goto table entries
