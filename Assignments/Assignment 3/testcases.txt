@@ -1,0 +1,15 @@
+val a = Sig([(Node("a"), 0), (Node("b"), 0), (Node("g"), 2), (Node("h"), 2), (Variable("X"), 0), (Variable("Z"), 0)]);
+val b = Func("g", [Func("h", [Var("X"), Symbol("a")]), Func("h", [Symbol("b"), Var("X")])]);
+val c = Func("g", [Func("h", [Symbol("b"), Symbol("a")]), Func("h", [Var("X"), Var("Z")])]);
+val d = Func("g", [Func("h", [Var("X"), Symbol("a")]), Var("Y")]);
+val e = Func("g", [Var("Z"), Func("h", [Symbol(“b”), Var("X")])]);
+val f = Func("g", [Var("Y"), Func("h", [Symbol(“b”), Var("X")])]);
+val g = Var(“M”);
+
+val a = Sig([(Node("a"), 0), (Node("a"), 1), (Node("b"), 2)]);
+val a = Sig([(Node("a"), -1)]);
+val a = Sig([(Node("a"), 0), (Node("a"), 0)]);
+val a = Sig([(Node("a"), 0), (Node("b"), 1), (Node("c"), 2)]);
+val b = Func("c", [Func("b", [Symbol("c")])]);
+val c = Func("b", [Func("c", [Symbol("a"), Symbol("a")]), Symbol("a")]);
+val d = Func("b", [Func("c", [Symbol("a"), Symbol("a")])]);

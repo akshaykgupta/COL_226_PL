@@ -13,3 +13,6 @@ Fol.parse_string "em(2 exp 3 exp 4).;";
 Fol.parse_string "app(Orange).;";
 Fol.parse_string "app(Apples and Orange).;";
 Fol.parse_string "app( not Applies ).;";
+Fol.parse_string "add(0, Y, Y).;";
+Fol.parse_string "add(fun(X), Y, fun(Z)) :- add(X, Y, Z).;";
+Fol.parse_string "add(X + 1, Y, Z + 1) :- add(X, Y, Z).;";
